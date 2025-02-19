@@ -1,84 +1,84 @@
-const words = ["javascript", "hangman", "developer", "challenge", "programming"];
+// script.js
+const words = [
+  { word: "javascript", hint: "A programming language used for web development." },
+  { word: "hangman", hint: "A classic word-guessing game." },
+  { word: "developer", hint: "A person who writes and debugs code." },
+  { word: "challenge", hint: "A task that tests someone's abilities." },
+  { word: "programming", hint: "The process of writing computer software." },
+];
+
 let selectedWord = words[Math.floor(Math.random() * words.length)];
 let guessedLetters = [];
 let incorrectGuesses = 0;
-const maxIncorrectGuesses = 7; // Updated to match the new hangmanArt length
+const maxIncorrectGuesses = 6;
 
 const hangmanArt = [
   `
-      ____
-     |    |
-     |    
-     |    
-     |    
-     |    
+  +---+
+  |   |
+      |
+      |
+      |
+      |
   =========
   `,
   `
-      ____
-     |    |
-     |    O
-     |    
-     |    
-     |    
+  +---+
+  |   |
+  O   |
+      |
+      |
+      |
   =========
   `,
   `
-      ____
-     |    |
-     |    O
-     |    |
-     |    
-     |    
+  +---+
+  |   |
+  O   |
+  |   |
+      |
+      |
   =========
   `,
   `
-      ____
-     |    |
-     |    O
-     |   /|
-     |    
-     |    
+  +---+
+  |   |
+  O   |
+ /|   |
+      |
+      |
   =========
   `,
   `
-      ____
-     |    |
-     |    O
-     |   /|\\
-     |    
-     |    
+  +---+
+  |   |
+  O   |
+ /|\\  |
+      |
+      |
   =========
   `,
   `
-      ____
-     |    |
-     |    O
-     |   /|\\
-     |   / 
-     |    
+  +---+
+  |   |
+  O   |
+ /|\\  |
+ /    |
+      |
   =========
   `,
   `
-      ____
-     |    |
-     |    O
-     |   /|\\
-     |   / \\
-     |    
-  =========
-  `,
-  `
-      ____
-     |    |
-     |    O
-     |   /|\\
-     |   / \\
-     |  🔑  
+  +---+
+  |   |
+  O   |
+ /|\\  |
+ / \\  |
+      |
   =========
   `,
 ];
 
+const hintElement = document.getElementById("hint");
 const wordDisplay = document.getElementById("word-display");
 const hangmanArtElement = document.getElementById("hangman-art");
 const keyboard = document.getElementById("keyboard");
@@ -86,9 +86,10 @@ const message = document.getElementById("message");
 const resetButton = document.getElementById("reset-button");
 
 function initializeGame() {
+  selectedWord = words[Math.floor(Math.random() * words.length)];
   guessedLetters = [];
   incorrectGuesses = 0;
-  selectedWord = words[Math.floor(Math.random() * words.length)];
+  hintElement.textContent = `Hint: ${selectedWord.hint}`;
   updateWordDisplay();
   updateHangmanArt();
   generateKeyboard();
@@ -96,7 +97,7 @@ function initializeGame() {
 }
 
 function updateWordDisplay() {
-  wordDisplay.textContent = selectedWord
+  wordDisplay.textContent = selectedWord.word
     .split("")
     .map((letter) => (guessedLetters.includes(letter) ? letter : "_"))
     .join(" ");
@@ -122,7 +123,7 @@ function handleGuess(letter) {
   if (guessedLetters.includes(letter)) return;
 
   guessedLetters.push(letter);
-  if (!selectedWord.includes(letter)) {
+  if (!selectedWord.word.includes(letter)) {
     incorrectGuesses++;
   }
 
@@ -133,7 +134,7 @@ function handleGuess(letter) {
 
 function checkGameStatus() {
   if (incorrectGuesses >= maxIncorrectGuesses) {
-    message.textContent = `Game Over! The word was "${selectedWord}".`;
+    message.textContent = `Game Over! The word was "${selectedWord.word}".`;
     disableKeyboard();
   } else if (!wordDisplay.textContent.includes("_")) {
     message.textContent = "Congratulations! You won!";
